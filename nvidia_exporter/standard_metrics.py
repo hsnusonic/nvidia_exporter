@@ -29,8 +29,42 @@ def register_standard_metrics():
                lambda h: nvmlDeviceGetTemperatureThreshold(h, 1)),
         Metric('process_count',
                'Number of running compute processes',
-               lambda h: len(nvmlDeviceGetComputeRunningProcesses(h)))
-    ]
+               lambda h: len(nvmlDeviceGetComputeRunningProcesses(h))),
+        Metric('gpu_util',
+               'Percent of time over the past sample period during which one or more kernels was executing on the GPU',
+               lambda h: nvmlDeviceGetUtilizationRates(h).gpu),
+        Metric('mem_util',
+               'Percent of time over the past sample period during which global (device) memory was being read or written',
+               lambda h: nvmlDeviceGetUtilizationRates(h).memory),
+
+	Metric('cpu_util',
+               'Percent of time over the past sample period during which one or more kernels was executing on the CPU',
+               lambda h: nvmlDeviceGetUtilizationRates(h).memory),
+	Metric('mem_total_bytes',
+               'Total installed FB memory (in  bytes)',
+               lambda h: nvmlDeviceGetMemoryInfo(h).total),
+        Metric('mem_free_bytes',
+               'Unallocated memory (in bytes)',
+               lambda h: nvmlDeviceGetMemoryInfo(h).free),
+        Metric('mem_used_bytes',
+               'Allocated memory (in bytes)',
+               lambda h: nvmlDeviceGetMemoryInfo(h).used),
+	Metric('storage_total_bytes',
+               'Total installed storage (in  bytes)',
+               lambda h: nvmlDeviceGetMemoryInfo(h).total),
+        Metric('storage_free_bytes',
+               'Unallocated storage (in bytes)',
+               lambda h: nvmlDeviceGetMemoryInfo(h).free),
+        Metric('storage_used_bytes',
+               'Allocated storage (in bytes)',
+               lambda h: nvmlDeviceGetMemoryInfo(h).used),
+	Metric('network_in',
+		'Total Bytes Received Across Network Interfaces (in bytes)',
+		lambda h: nvmlDeviceGetMemoryInfo(h).used),
+	Metric('network_out',
+		'Total Bytes Transfered Across Network Interfaces (in bytes)',
+		lambda h: nvmlDeviceGetMemoryInfo(h).used)
+	]
 
     device_count = int(nvmlDeviceGetCount())
     for device_index in range(device_count):
